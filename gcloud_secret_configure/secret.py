@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 
 import google.auth
 from google.auth.exceptions import DefaultCredentialsError
@@ -20,7 +21,7 @@ class GoogleSecretFetcher(SecretFetcher):
     Concrete implementation for fetching secrets from Google Cloud.
     """
 
-    def fetch_secret(self, secret_label="env_file", version="latest") -> str | None:
+    def fetch_secret(self, secret_label="env_file", version="latest") -> Optional[str]:
         try:
             _, project_id = google.auth.default()
         except DefaultCredentialsError:

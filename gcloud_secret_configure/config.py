@@ -2,6 +2,7 @@ import io
 import os
 import pathlib
 from functools import lru_cache
+from typing import Dict
 
 from decouple import Config, RepositoryEmpty, RepositoryEnv
 
@@ -12,12 +13,17 @@ ENV_PATH = BASE_DIR / ".env"
 
 
 class StringFileParser:
-    def __init__(self, source):
+    """
+    Helper class to parse a string containing key-value pairs
+    :param source: A string containing key-value pairs
+    """
+
+    def __init__(self, source: io.StringIO):
         if not isinstance(source, io.StringIO):
             raise ValueError("source must be an instance of io.StringIO")
         self.source = source
 
-    def parse(self):
+    def parse(self) -> Dict[str, str]:
         data = {}
         file_ = self.source.read().split("\n")
         for line in file_:
@@ -44,7 +50,13 @@ class StringFileParser:
 
 
 class RepositoryString(RepositoryEmpty):
-    def __init__(self, source):
+    """
+    Repository class to parse a string containing key-value pairs
+
+    :param source: A string containing key-value pairs
+    """
+
+    def __init__(self, source: io.StringIO):
         parser = StringFileParser(source)
         self.data = parser.parse()
 
@@ -56,7 +68,18 @@ class RepositoryString(RepositoryEmpty):
 
 
 @lru_cache()
-def get_config(secret_fetcher=None, env_path=ENV_PATH):
+def get_config(secret_fetcher=None, env_path: pathlib.Path = ENV_PATH) -> Config:
+    """
+    Returns a decouple.Config or decouple.AutoConfig instance
+    :param secret_fetcher: An instance of a secret fetcher class
+    :param env_path: Path to the .env file
+    :return: decouple.Config or decouple.AutoConfig instance
+
+    Usage:
+    >>> from gcloud_secret_configure.config import get_config
+    >>> config = get_config()
+    >>> config("KEY")
+    """
     if env_path and env_path.exists():
         return Config(RepositoryEnv(str(env_path)))
 
