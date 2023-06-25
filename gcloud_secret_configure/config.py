@@ -71,7 +71,7 @@ class RepositoryString(RepositoryEmpty):
 def get_config(secret_fetcher=None, env_path: pathlib.Path = ENV_PATH) -> Config:
     """
     Returns a decouple.Config or decouple.AutoConfig instance
-    :param secret_fetcher: An instance of a secret fetcher class
+    :param secret_fetcher: An instance of a secret fetcher class like 'GoogleSecretFetcher' class.
     :param env_path: Path to the .env file
     :return: decouple.Config or decouple.AutoConfig instance
 
