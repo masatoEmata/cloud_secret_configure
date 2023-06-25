@@ -68,12 +68,17 @@ class RepositoryString(RepositoryEmpty):
 
 
 @lru_cache()
-def get_config(secret_fetcher=None, env_path: pathlib.Path = ENV_PATH) -> Config:
+def get_config(
+    secret_fetcher=None,
+    env_path: pathlib.Path = ENV_PATH,
+    secret_label: str = "env_file",
+) -> Config:
     """
     Returns a decouple.Config or decouple.AutoConfig instance
     :param secret_fetcher: An instance of a secret fetcher class
         like 'GoogleSecretFetcher' class.
     :param env_path: Path to the .env file
+    :param secret_label: Label of the secret to be fetched
     :return: decouple.Config or decouple.AutoConfig instance
 
     Usage:
@@ -85,7 +90,7 @@ def get_config(secret_fetcher=None, env_path: pathlib.Path = ENV_PATH) -> Config
         return Config(RepositoryEnv(str(env_path)))
 
     if secret_fetcher:
-        payload = secret_fetcher.fetch_secret()
+        payload = secret_fetcher.fetch_secret(secret_label=secret_label)
         if payload is not None:
             return Config(RepositoryString(payload))
 

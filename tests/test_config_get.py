@@ -41,19 +41,21 @@ def test_get_config(monkeypatch):
 
     # Case 3: When a secret fetcher is provided and it returns a valid configuration
     class MockSecretFetcher:
-        def fetch_secret(self):
+        def fetch_secret(self, secret_label="env_file", version="latest"):
             return io.StringIO(
                 "KEY=value"
             )  # Simulating a secret fetcher that returns a valid configuration
 
-    config = get_config(secret_fetcher=MockSecretFetcher())
+    config = get_config(
+        secret_fetcher=MockSecretFetcher(), secret_label="env_file"
+    )  # actually, 'secret_label' is not needed here
     assert isinstance(config, Config) or isinstance(
         config, AutoConfig
     )  # The returned config should be an instance of decouple.Config or AutoConfig
 
     # Case 4: When a secret fetcher is provided and it returns None
     class MockSecretFetcher:
-        def fetch_secret(self):
+        def fetch_secret(self, secret_label="env_file", version="latest"):
             return None  # Simulating a secret fetcher that returns None
 
     config = get_config(secret_fetcher=MockSecretFetcher())

@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="gcloud-secret-configure",
-    version="0.0.1",
+    version="0.0.2",
     description="A package to configure environment variables from Google Cloud Secret Manager",
     packages=find_packages(),
     install_requires=[],

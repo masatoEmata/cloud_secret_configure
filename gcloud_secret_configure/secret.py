@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from io import StringIO
 from typing import Optional
 
 import google.auth
@@ -12,7 +13,7 @@ class SecretFetcher(ABC):
     """
 
     @abstractmethod
-    def fetch_secret(self):
+    def fetch_secret(self, secret_label, version):
         pass
 
 
@@ -21,7 +22,13 @@ class GoogleSecretFetcher(SecretFetcher):
     Concrete implementation for fetching secrets from Google Cloud.
     """
 
-    def fetch_secret(self, secret_label="env_file", version="latest") -> Optional[str]:
+    def fetch_secret(
+        self, secret_label="env_file", version="latest"
+    ) -> Optional[StringIO]:
+        """
+        Fetches the secret from Google Secret Manager
+        and returns it as a StringIO object.
+        """
         try:
             _, project_id = google.auth.default()
         except DefaultCredentialsError:
@@ -39,4 +46,4 @@ class GoogleSecretFetcher(SecretFetcher):
         payload = client.access_secret_version(
             name=gcloud_secret_name
         ).payload.data.decode("UTF-8")
-        return payload
+        return StringIO(payload)

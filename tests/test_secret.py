@@ -1,3 +1,4 @@
+from io import StringIO
 from unittest.mock import patch
 
 from google.auth.exceptions import DefaultCredentialsError
@@ -14,7 +15,9 @@ def test_fetch_secret(mock_auth_default, mock_secret_client):
         "test_secret"
     )
     fetcher = GoogleSecretFetcher()
-    assert fetcher.fetch_secret() == "test_secret"
+    result = fetcher.fetch_secret()
+    assert isinstance(result, StringIO)  # assert the return type
+    assert result.getvalue() == "test_secret"  # assert the content
 
     # english: Test for authentication error
     mock_auth_default.side_effect = DefaultCredentialsError("Error")
