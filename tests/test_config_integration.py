@@ -14,8 +14,13 @@ from gcloud_secret_configure.secret import GoogleSecretFetcher
 @patch("gcloud_secret_configure.secret.google.auth.default")
 def test_get_config(mock_auth_default, mock_fetch_secret, mock_repository_string):
     # Test for normal operation
-    mock_auth_default.return_value = (Mock(), "test_project")
-    mock_fetch_secret.return_value = io.StringIO("key=test_value")
+    mock_auth_default.return_value = (
+        Mock(),
+        "test_project",
+    )  # I don't want to use the real credentials
+    mock_fetch_secret.return_value = io.StringIO(
+        "key=test_value"
+    )  # I don't want to use the real secret
     mock_repository_string.return_value = {"key": "test_value"}
     config = get_config(GoogleSecretFetcher())
     assert config("key", default="default") == "test_value"
