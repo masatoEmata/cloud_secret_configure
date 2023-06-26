@@ -5,8 +5,7 @@ import pytest
 from decouple import UndefinedValueError
 from google.auth.exceptions import DefaultCredentialsError
 
-from gcloud_secret_configure.config import get_config
-from gcloud_secret_configure.secret import GoogleSecretFetcher
+from gcloud_secret_configure import GoogleSecretFetcher, get_config
 
 
 @patch("gcloud_secret_configure.config.RepositoryString")
