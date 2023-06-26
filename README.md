@@ -12,8 +12,7 @@ pip install gcloud_secret_configure
 
 ## Usage
 ```py
-from gcloud_secret_configure.config import get_config
-from gcloud_secret_configure.secret import GoogleSecretFetcher
+from gcloud_secret_configure import get_config, GoogleSecretFetcher
 
 # 'secret_label' must be the label of the uploaded secret
 config = get_config(GoogleSecretFetcher(), secret_label="py_env_file")
